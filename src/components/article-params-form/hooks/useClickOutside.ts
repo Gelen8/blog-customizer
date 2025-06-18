@@ -14,18 +14,20 @@ export const useClickOutside = ({
 	rootRef,
 }: ClickOutside) => {
 	useEffect(() => {
+		if (!isOpen) return;
+
 		const handleClick = (event: MouseEvent) => {
 			const { target } = event;
 			if (target instanceof Node && !rootRef.current?.contains(target)) {
-				isOpen && onClose?.();
+				onClose?.();
 				onChange?.(false);
 			}
 		};
 
-		window.addEventListener('mousedown', handleClick);
+		document.addEventListener('mousedown', handleClick);
 
 		return () => {
-			window.removeEventListener('mousedown', handleClick);
+			document.removeEventListener('mousedown', handleClick);
 		};
 	}, [onClose, onChange, isOpen]);
 };
